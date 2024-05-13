@@ -110,3 +110,26 @@ Now we need to edit the sudoers file by doing `visudo` to edit the file using vi
 
 To finally check whether the user has been given the root privileges with sudo do:
 `su - nightfury(yourusername)`
+
+## Setting Timezone and Region
+
+- Set according to your local timezone.
+	`ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime`
+- Now to sync to the set timezone type;
+	`hwclock --systohc`
+
+## Setting System Lang
+
+- Edit a file `locale.gen` at `/etc` by:
+	`nvim /etc/locale.gen`
+	Again i would say open it with the text editor you are comfortable with.
+- Uncomment the line `en_US.UTF-8 UTF-8`
+- After this generate the locale by: 
+	`locale-gen`
+- Create a locale config file in /etc/ and add your default lang in my case English
+	- `nvim /etc/locale.conf`
+	- Once into the file add `LANG = en_US.UTF-8`
+	- Save and exit
+
+## Setting up host name
+
