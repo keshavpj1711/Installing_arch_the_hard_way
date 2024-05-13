@@ -25,3 +25,49 @@ First things first we need to setup our network connection.
 - Now exit iwctl and type: 
 	`iwctl --passphrase "Yourpassword" station wlan0 connect "YourNetworkName"`
 - Then check for connectivity using the steps mentioned above.
+
+# Partitioning those disks (getting ready)
+
+This is where we will be defining all the the steps to partition our disk for our very own system to be installed.
+
+## Getting to know where to install
+
+- type `lsblk` this gives you all the disks and partitions already present.
+- We will be using cfdisk to partition our usable disk.
+
+## Partitioning the disk
+
+- Use `cfdisk /dev/your_selected_disk` to select the disk on which we will be working on.
+- Now using fdisk we need to create mainly 3 partitions:
+	- Root partition
+	- EFI partition
+	- Swap partition
+- Like this
+	![](./images/Pasted%20image%2020240513193338.png)
+- Now our next task is **formatting our partitions** 
+
+### Formatting our partitions
+
+- Formatting our EFI Partition
+	- `mkfs.fat -F32 /dev/partition_name`
+- Formatting root partition
+	- `mkfs.ext4 /dev/partition_name`
+- Formatting swap partition
+	- `mkswap /dev/partition_name`
+This part is now completed and we can move onto mounting and creating required directories.
+Just for confirmation: 
+![](./images/Pasted%20image%2020240513194254.png)
+
+### Mounting disks 
+
+Now mount your root partition and make directory `/boot`
+- Mounting root partition: 
+	- `mount /dev/partition_name /mnt`
+- Make directory:
+	- `mkdir /mnt/boot`
+Next mounting the boot partition: `mount /dev/partition_name_efi /mnt/boot`
+Enabling the swap partition: `swapon /dev/partition_name_swap`
+
+After mounting everything correctly it should look like this:
+![](./images/Pasted%20image%2020240513195014.png)
+
