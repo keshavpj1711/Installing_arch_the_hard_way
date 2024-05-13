@@ -71,3 +71,19 @@ Enabling the swap partition: `swapon /dev/partition_name_swap`
 After mounting everything correctly it should look like this:
 ![](./images/Pasted%20image%2020240513195014.png)
 
+# Installing Arch and all the necessary packages
+
+To install arch and essential packages use:
+`pacstrap -i /mnt base base-devel linux linux -firmware git sudo fastfetch bpytop amd-ucode nano neovim vim bluez bluez-utils networkmanager`
+
+> After this is done and we boot from the main drive we need to tell the system to mount these partitions to the same location and that is done by **generating `fstabfile`**
+
+# Generating File System Table(fstab)
+
+To generate fstab: `genfstab -U /mnt >> /mnt/etc/fstab`
+To check all the partitions and their mounting point are written correctly: 
+	basically opening the fstab file: `cat /mnt/etc/fstab`
+
+Now next thing we need to do is enter into the drive where we installed arch, to do that we do: `arch-chroot /mnt`
+After using our above command we have actually entered arch as a root user.
+
