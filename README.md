@@ -87,3 +87,26 @@ To check all the partitions and their mounting point are written correctly:
 Now next thing we need to do is enter into the drive where we installed arch, to do that we do: `arch-chroot /mnt`
 After using our above command we have actually entered arch as a root user.
 
+# Configuring Arch
+
+## Setting a new root password
+
+- This can be done by using the command: `passwd`
+- Now the prompt asks you to enter the new password.
+
+## Adding a Standard User 
+
+- A user can be added  by:
+	- `useradd -m -g users -G wheel,storage,power,video,audio -s /bin/bash nightfury(yourusername)`
+- Then add the password for the user: 
+	- `passwd nightfury`
+
+### Giving a user root privileges on running commands with sudo 
+
+Now we need to edit the sudoers file by doing `visudo` to edit the file using vim.
+
+- In the sudoers file uncomment the line which says member of group wheel to execute any command.
+- For this step you must know the basic navigation of vim like getting into insert mode, making and saving changes and finally exiting it.
+
+To finally check whether the user has been given the root privileges with sudo do:
+`su - nightfury(yourusername)`
