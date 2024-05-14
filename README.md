@@ -74,6 +74,7 @@ After mounting everything correctly it should look like this:
 # Installing Arch and all the necessary packages
 
 To install arch and essential packages use:
+
 `pacstrap -i /mnt base base-devel linux linux -firmware git sudo fastfetch bpytop amd-ucode nano neovim vim bluez bluez-utils networkmanager`
 
 > After this is done and we boot from the main drive we need to tell the system to mount these partitions to the same location and that is done by **generating `fstabfile`**
@@ -82,6 +83,7 @@ To install arch and essential packages use:
 
 To generate fstab: `genfstab -U /mnt >> /mnt/etc/fstab`
 To check all the partitions and their mounting point are written correctly: 
+
 	basically opening the fstab file: `cat /mnt/etc/fstab`
 
 Now next thing we need to do is enter into the drive where we installed arch, to do that we do: `arch-chroot /mnt`
@@ -97,8 +99,11 @@ After using our above command we have actually entered arch as a root user.
 ## Adding a Standard User 
 
 - A user can be added  by:
+
 	- `useradd -m -g users -G wheel,storage,power,video,audio -s /bin/bash nightfury(yourusername)`
+
 - Then add the password for the user: 
+
 	- `passwd nightfury`
 
 ### Giving a user root privileges on running commands with sudo 
@@ -109,20 +114,25 @@ Now we need to edit the sudoers file by doing `visudo` to edit the file using vi
 - For this step you must know the basic navigation of vim like getting into insert mode, making and saving changes and finally exiting it.
 
 To finally check whether the user has been given the root privileges with sudo do:
+
 `su - nightfury(yourusername)`
 
 ## Setting Timezone and Region
 
 - Set according to your local timezone.
+
 	`ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime`
+
 - Now to sync to the set timezone type;
+
 	`hwclock --systohc`
 
 ## Setting System Lang
 
 - Edit a file `locale.gen` at `/etc` by:
-	`nvim /etc/locale.gen`
-	Again i would say open it with the text editor you are comfortable with.
+
+	- `nvim /etc/locale.gen`
+	- Again i would say open it with the text editor you are comfortable with.
 - Uncomment the line `en_US.UTF-8 UTF-8`
 - After this generate the locale by: 
 	`locale-gen`
@@ -133,3 +143,43 @@ To finally check whether the user has been given the root privileges with sudo d
 
 ## Setting up host name
 
+- Creating a file /etc/hostname 
+- In the opened file just add the hostname you want to set.
+	- Example: `archlinux`
+	- Then save and exit
+
+After that we need to edit the /etc/hosts file and add the following
+```
+127.0.0.1        localhost
+::1              localhost
+127.0.1.1        archlinux.localdomain      archlinux
+```
+
+# Installing Grub
+
+Installing grub and other essentials: 
+
+	`pacman -S grub efibootmgr dosfstools mtools`
+
+Now we need to install grub on the /boot partition that we made earlier:
+
+	`grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=`
+
+>Note this will only work if you have a UEFI system
+
+Then generate a grub config file:
+
+	`grub-mkconfig -o /boot/grub/grub.cfg`
+
+# Enabling Essential services
+
+- `systemctl enable bluetooth`
+- `systemctl enable NetworkManager`
+
+# Unmounting all the partitions
+
+- `umount -lR /mnt`
+
+> Hurrah!! you have successfully installed Arch Linux the proper way.
+
+After this you can remove your flash drive and carry on with ricing your system.
